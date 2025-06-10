@@ -14,4 +14,8 @@ class BreedsRepository : BreedsRepositoryInterface
     override suspend fun searchBreeds(query: String): List<Breed> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getBreedById(breedId: String): Breed? {
+        TODO("Not yet implemented")
+    }
 }

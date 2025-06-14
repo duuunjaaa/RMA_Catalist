@@ -1,12 +1,11 @@
-package com.example.catalist.breeds.domain
+package com.example.catalist.breeds.api.model
 
-import com.example.catalist.breeds.api.model.Weight
+import com.example.catalist.breeds.domain.Breed
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-// TODO: @Serializable se zuti??
 @Serializable
-data class Breed(
+data class BreedApiModel(
     val id: String,
     val name: String,
 
@@ -17,7 +16,7 @@ data class Breed(
     val temperament: String,
 
     @SerialName("origin")
-    val countries: String,
+    val origin: String,
 
     @SerialName("life_span")
     val lifeSpan: String,
@@ -27,8 +26,7 @@ data class Breed(
     @SerialName("wikipedia_url")
     val wikipediaUrl: String? = null,
 
-    @SerialName("rare")
-    val isRare: Int = 0,
+    val rare: Int = 0,
 
     @SerialName("adaptability")
     val adaptability: Int = 0,
@@ -45,13 +43,11 @@ data class Breed(
     @SerialName("energy_level")
     val energyLevel: Int = 0,
 
-    @SerialName("grooming")
     val grooming: Int = 0,
 
     @SerialName("health_issues")
     val healthIssues: Int = 0,
 
-    @SerialName("intelligence")
     val intelligence: Int = 0,
 
     @SerialName("shedding_level")
@@ -63,11 +59,40 @@ data class Breed(
     @SerialName("stranger_friendly")
     val strangerFriendly: Int = 0,
 
-    @SerialName("vocalisation")
-    val vocalisation: Int = 0
+    val vocalisation: Int = 0,
+
+    @SerialName("reference_image_id")
+    val imageId: String? = null
 )
 
 @Serializable
 data class Weight(
-    val metric: String // npr. "3 - 5"
+    val metric: String
 )
+
+fun BreedApiModel.toDomain(): Breed {
+    return Breed(
+        id = id,
+        name = name,
+        altNames = altNames,
+        description = description,
+        temperament = temperament,
+        countries = origin,
+        lifeSpan = lifeSpan,
+        weight = weight,
+        wikipediaUrl = wikipediaUrl,
+        isRare = rare,
+        adaptability = adaptability,
+        affectionLevel = affectionLevel,
+        childFriendly = childFriendly,
+        dogFriendly = dogFriendly,
+        energyLevel = energyLevel,
+        grooming = grooming,
+        healthIssues = healthIssues,
+        intelligence = intelligence,
+        sheddingLevel = sheddingLevel,
+        socialNeeds = socialNeeds,
+        strangerFriendly = strangerFriendly,
+        vocalisation = vocalisation
+    )
+}

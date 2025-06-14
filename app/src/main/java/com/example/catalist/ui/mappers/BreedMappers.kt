@@ -3,6 +3,7 @@ import com.example.catalist.breeds.domain.Breed
 import com.example.catalist.ui.model.BreedDetailsUiModel
 import com.example.catalist.ui.model.BreedUiModel
 
+// todo ovo sad ne koristim
 fun Breed.toUiModel(): BreedUiModel {
     return BreedUiModel(
         id = id,
@@ -17,7 +18,7 @@ fun Breed.toDetailsUiModel(): BreedDetailsUiModel {
     return BreedDetailsUiModel(
         id = id,
         name = name,
-        //altNames = altNames?.takeIf { it.isNotBlank() },
+        altNames = altNames?.takeIf { it.isNotBlank() },
         description = description,
         temperament = temperament.split(", ").map { it.trim() },
         originCountries = countries.split(", ").map { it.trim() },

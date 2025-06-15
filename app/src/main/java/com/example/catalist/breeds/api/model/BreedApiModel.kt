@@ -62,8 +62,17 @@ data class BreedApiModel(
     val vocalisation: Int = 0,
 
     @SerialName("reference_image_id")
-    val imageId: String? = null
+    val imageId: String? = null,
+    //val image: ImageApiModel? = null // može biti null
 )
+
+//@Serializable
+//data class ImageApiModel(
+//    val id: String? = null,
+//    val width: Int? = null,
+//    val height: Int? = null,
+//    val url: String? = null
+//)
 
 @Serializable
 data class Weight(

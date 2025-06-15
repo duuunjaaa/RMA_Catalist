@@ -1,10 +1,8 @@
 package com.example.catalist.breeds.details
 
-import com.example.catalist.breeds.domain.Breed
 import com.example.catalist.ui.model.BreedDetailsUiModel
-import com.example.catalist.ui.model.BreedUiModel
 
-interface BreedsDetailsContract {
+interface BreedDetailsContract {
     data class UiState(
         val isLoading: Boolean = true,
         val breedId: String,
@@ -17,6 +15,6 @@ interface BreedsDetailsContract {
     }
 
     sealed class SideEffect {
-        data class OpenUrl(val url: String) : SideEffect()
+        //data class OpenUrl(val url: String) : SideEffect() todo: mislim da mi ovo ne treba ustvari
     }
 }

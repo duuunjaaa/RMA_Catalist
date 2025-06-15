@@ -1,5 +1,7 @@
 package com.example.catalist.ui.model
 
+import com.example.catalist.breeds.api.model.ImageApiModel
+
 data class BreedDetailsUiModel (
     val id: String,
     val name: String,
@@ -12,5 +14,6 @@ data class BreedDetailsUiModel (
     val weight: String,             // npr. "3–5 kg"
     val traits: Map<String, Int>,   // ključ → vrednost, npr. "adaptability" -> 5
     val isRare: Boolean,
-    val wikiUrl: String?
+    val wikiUrl: String?,
+    //val image: ImageApiModel?
 )

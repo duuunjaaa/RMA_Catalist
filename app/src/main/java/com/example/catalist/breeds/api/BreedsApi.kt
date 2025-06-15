@@ -1,6 +1,7 @@
 package com.example.catalist.breeds.api
 
 import com.example.catalist.breeds.api.model.BreedApiModel
+import com.example.catalist.breeds.api.model.ImageApiModel
 import kotlinx.serialization.Serializable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,6 +17,9 @@ interface BreedsApi {
 
     @GET("breeds/search")
     suspend fun searchBreeds(@Query("q") query: String): List<BreedApiModel>
+
+    @GET("images/{image_id}")
+    suspend fun getImageById(@Path("image_id") imageId: String): ImageApiModel
 
     @GET("images/search")
     suspend fun getImageForBreed(@Query("breed_ids") breedId: String): List<ImageResponse>

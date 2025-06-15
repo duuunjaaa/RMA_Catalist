@@ -4,16 +4,17 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.catalist.breeds.api.model.BreedApiModel
+import com.example.catalist.breeds.details.BreedDetailsContract.*
 import com.example.catalist.breeds.repository.BreedRepository
-import com.example.catalist.ui.mappers.toDetailsUiModel
+import com.example.catalist.navigation.breedId
+import com.example.catalist.navigation.breedIdOrThrow
 import com.example.catalist.ui.model.BreedDetailsUiModel
-import com.example.catalist.ui.model.BreedUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.String
-import kotlin.text.take
 
 @HiltViewModel
 class BreedDetailsViewModel @Inject constructor(
@@ -21,39 +22,56 @@ class BreedDetailsViewModel @Inject constructor(
     private val repository: BreedRepository
 ) : ViewModel() {
 
-    private val breedId: String = checkNotNull(savedStateHandle["breedId"])
-    private val _state = MutableStateFlow(BreedsDetailsContract.UiState(breedId = breedId))
+    private val breedId: String = savedStateHandle.breedIdOrThrow
+
+    private val _state = MutableStateFlow(UiState(breedId = breedId))
     val state = _state.asStateFlow()
-    private fun setState(reducer: BreedsDetailsContract.UiState.() -> BreedsDetailsContract.UiState) =
-        _state.update(reducer)
+    private fun setState(reducer: UiState.() -> UiState) = _state.getAndUpdate(reducer)
 
-    private val _sideEffect = MutableSharedFlow<BreedsDetailsContract.SideEffect>()
-    val sideEffect = _sideEffect.asSharedFlow()
-
-    private val events = MutableSharedFlow<BreedsDetailsContract.UiEvent>()
-    fun setEvent(event: BreedsDetailsContract.UiEvent) = viewModelScope.launch {
+    private val events = MutableSharedFlow<UiEvent>()
+    fun setEvent(event: UiEvent) = viewModelScope.launch {
         events.emit(event)
     }
+
+    private val _sideEffect: Channel<SideEffect> = Channel()
+    val sideEffect = _sideEffect.receiveAsFlow()
+    private fun setSideEffect(effect: SideEffect) = viewModelScope.launch { _sideEffect.send(effect) }
+
 
     init {
         observeEvents()
         loadBreed()
     }
 
-    private fun observeEvents() = viewModelScope.launch {
-        events.collect { event ->
-            when (event) {
-                is BreedsDetailsContract.UiEvent.OpenWikiPage -> {
-                    state.value.breed?.wikiUrl?.let {
-                        _sideEffect.emit(BreedsDetailsContract.SideEffect.OpenUrl(it))
-                    }
+    private fun observeEvents() {
+        viewModelScope.launch {
+            events.collect { event ->
+                when (event) {
+                    UiEvent.OpenWikiPage -> openWikiPage()
                 }
             }
         }
     }
+    private fun openWikiPage() = viewModelScope.launch {
+ //       state.value.breed?.wikiUrl?.let {_sideEffect.emit(SideEffect.OpenUrl(it))
+//        passwordRepository.removePassword(passwordId)
+//        setEffect(SideEffect.PasswordDeleted)
+    }
+
+    // moja stara observeEvents fja
+//    private fun observeEvents() = viewModelScope.launch {
+//        events.collect { event ->
+//            when (event) {
+//                is UiEvent.OpenWikiPage -> {
+//                    state.value.breed?.wikiUrl?.let {
+//                        _sideEffect.emit(SideEffect.OpenUrl(it))
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private fun loadBreed() = viewModelScope.launch {
-        setState { copy(isLoading = true) }
         setState { copy(isLoading = true) }
 
         runCatching {
@@ -109,6 +127,7 @@ class BreedDetailsViewModel @Inject constructor(
             "Vocalisation" to vocalisation
         ),
         isRare = this.rare == 1,
-        wikiUrl = wikipediaUrl?.takeIf { it.isNotBlank() }
+        wikiUrl = wikipediaUrl?.takeIf { it.isNotBlank() },
+        //image = this.image
     )
 }

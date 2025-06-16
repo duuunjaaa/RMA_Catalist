@@ -128,6 +128,13 @@ class BreedDetailsViewModel @Inject constructor(
         ),
         isRare = this.rare == 1,
         wikiUrl = wikipediaUrl?.takeIf { it.isNotBlank() },
-        imageId = this.imageId
+        imageId = this.imageId,
+        adaptability = this.adaptability,
+        affectionLevel = this.affectionLevel,
+        childFriendly = this.childFriendly,
+        dogFriendly = this.dogFriendly,
+        energyLevel = this.energyLevel,
+        healthIssues = this.healthIssues,
+        grooming = this.grooming
     )
 }

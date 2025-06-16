@@ -15,5 +15,12 @@ data class BreedDetailsUiModel (
     val traits: Map<String, Int>,   // ključ → vrednost, npr. "adaptability" -> 5
     val isRare: Boolean,
     val wikiUrl: String?,
-    val imageId: String?
+    val imageId: String?,
+    val adaptability: Int,
+    val affectionLevel: Int,
+    val childFriendly: Int,
+    val dogFriendly: Int,
+    val energyLevel: Int,
+    val healthIssues: Int,
+    val grooming: Int
 )

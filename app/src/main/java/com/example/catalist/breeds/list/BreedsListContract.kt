@@ -15,8 +15,8 @@ interface BreedsListContract {
 
     sealed class UiEvent {
         data object LoadBreeds : UiEvent()
-        data class SearchQueryChanged(val query: String) : UiEvent()
-        //data class SearchBreeds(val query: String) : UiEvent()
+        //data class SearchQueryChanged(val query: String) : UiEvent()
+        data class SearchBreeds(val query: String) : UiEvent()
     }
 
     sealed class SideEffect {

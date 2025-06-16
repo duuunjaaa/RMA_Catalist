@@ -3,15 +3,11 @@ package com.example.catalist.breeds.list
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.Color
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.catalist.core.compose.NoDataContent
 import com.example.catalist.ui.model.BreedUiModel
 
@@ -46,25 +42,16 @@ private fun BreedsListScreen(
         }
         else if (state.breeds.isEmpty()) {
             NoDataContent(
-                text = "There is no password.",
+                text = "There are no breeds.",
             )
         }else {
-            TextField(
-                value = state.searchText,
-                onValueChange = { text ->
-                    eventPublisher(BreedsListContract.UiEvent.SearchQueryChanged(query = text))
+            MySearchBar(
+
+                modifier = Modifier.fillMaxWidth(),
+                onSearchTriggered = { query ->
+                    eventPublisher(BreedsListContract.UiEvent.SearchBreeds(query))
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
-                ),
-                placeholder = { Text(text = "Search") },
-                shape = CircleShape,
-                //leadingIcon = { AppIconButton(imageVector = Icons.Default.Search, onClick = { }) }
+                onClearSearch = { eventPublisher(BreedsListContract.UiEvent.LoadBreeds)}
             )
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(state.breeds) { breed ->
@@ -72,6 +59,36 @@ private fun BreedsListScreen(
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MySearchBar(
+    modifier: Modifier = Modifier,
+    onSearchTriggered: (String) -> Unit,
+    onClearSearch: () -> Unit
+) {
+    var query by rememberSaveable { mutableStateOf("") }
+    var active by rememberSaveable { mutableStateOf(false) }
+
+    SearchBar(
+        query = query,
+        onQueryChange = { query = it },
+        onSearch = {
+            if (query.isBlank()) {
+                onClearSearch()
+            } else {
+                onSearchTriggered(query) // poziva ViewModel tek kad korisnik potvrdi pretragu
+            }
+
+        },
+        active = active,
+        onActiveChange = { active = it },
+        placeholder = { Text("Search") },
+        modifier = modifier
+    ) {
+
     }
 }
 

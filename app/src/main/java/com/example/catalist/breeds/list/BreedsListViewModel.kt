@@ -27,8 +27,8 @@ class BreedsListViewModel @Inject constructor(
     fun setEvent(event: UiEvent) = viewModelScope.launch { events.emit(event) }
 
     init {
-        observeEvents()
         fetchBreeds()
+        observeEvents()
     }
 
     private fun observeEvents() {
@@ -36,7 +36,7 @@ class BreedsListViewModel @Inject constructor(
             events.collect { event ->
                 when (event) {
                     is UiEvent.LoadBreeds -> fetchBreeds()
-                    is UiEvent.SearchQueryChanged -> searchBreeds(event.query)
+                    is UiEvent.SearchBreeds -> searchBreeds(event.query)
                 }
             }
         }
@@ -92,6 +92,7 @@ class BreedsListViewModel @Inject constructor(
 //            }
 //        }
 //    }
+
     private fun searchBreeds(query: String) {
         _state.value = _state.value.copy(isLoading = true)
         viewModelScope.launch {
@@ -100,7 +101,8 @@ class BreedsListViewModel @Inject constructor(
             }.onSuccess { breeds ->
                 _state.value = UiState(
                     isLoading = false,
-                    breeds = breeds.map { it.asBreedUiModel() }
+                    breeds = breeds.map { it.asBreedUiModel() },
+                    //searchText = query
                 )
             }.onFailure { error ->
                 _state.value = _state.value.copy(

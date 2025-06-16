@@ -128,6 +128,6 @@ class BreedDetailsViewModel @Inject constructor(
         ),
         isRare = this.rare == 1,
         wikiUrl = wikipediaUrl?.takeIf { it.isNotBlank() },
-        //image = this.image
+        imageId = this.imageId
     )
 }

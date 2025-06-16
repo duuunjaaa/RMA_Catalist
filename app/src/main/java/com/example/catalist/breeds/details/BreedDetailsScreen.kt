@@ -85,12 +85,14 @@ private fun BreedDetailsScreen(
                         .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ){
-                    //Log.d("test BREED IMAGE URL = ", state.breed.image?.url.toString())
+                    Log.d("test BREED IMAGE URL = ", state.breed.imageId.toString())
                     SubcomposeAsyncImage(
                         //modifier = Modifier.size(100.dp),
                         modifier = Modifier.fillMaxWidth(),
                         //model = state.breed.image?.url,
-                        model = "https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg",
+                        //model = "https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg",
+                        model = ("https://cdn2.thecatapi.com/images/" + state.breed.imageId + ".jpg")
+                            ?: "",
                         contentDescription = null,
                         contentScale = ContentScale.FillBounds,
 //                                contentScale = ContentScale.Fit,
